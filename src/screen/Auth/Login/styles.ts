@@ -8,6 +8,8 @@ export default StyleSheet.create({
       android: 90,
       default: 70,
     }),
+    flex: 1,
+    justifyContent: 'center',
   },
   title: {
     fontSize: 24,
@@ -56,7 +58,21 @@ export default StyleSheet.create({
       ios: 14,
       default: 12,
     }),
+    flexDirection: 'row',
+    alignItems: 'center',
   },
+
+  activePasswordBtn: {
+    height: 20,
+    width: 20,
+    backgroundColor: '#838383',
+  },
+  disablePasswordBtn: {
+    height: 20,
+    width: 20,
+    backgroundColor: '#06cf49ff',
+  },
+
   formContainer: { marginTop: 28, marginBottom: 68 },
   input: {
     padding: 0,
