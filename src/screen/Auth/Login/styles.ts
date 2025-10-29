@@ -59,6 +59,7 @@ export default StyleSheet.create({
       default: 12,
     }),
     flexDirection: 'row',
+    justifyContent: 'space-between',
     alignItems: 'center',
   },
 
@@ -75,6 +76,7 @@ export default StyleSheet.create({
 
   formContainer: { marginTop: 28, marginBottom: 68 },
   input: {
+    flex: 1,
     padding: 0,
   },
   loginBtnContainer: {
