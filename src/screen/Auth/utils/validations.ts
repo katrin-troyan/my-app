@@ -1,0 +1,13 @@
+import * as Yup from 'yup';
+
+export const RegistrationSchema = () =>
+  Yup.object({
+    email: Yup.string().email('Invalid Email').required('Email is empty'),
+    password: Yup.string()
+      .matches(/^.{8,100}$/, 'Password must be more than 8 symbols')
+      .required('Password is empty'),
+    confirmPassword: Yup.string()
+      .nullable()
+      .oneOf([Yup.ref('password')], 'Passwords must match')
+      .required('Confirm Password is required'),
+  });

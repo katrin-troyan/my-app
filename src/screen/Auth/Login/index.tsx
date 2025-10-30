@@ -1,16 +1,10 @@
-import {
-  Keyboard,
-  KeyboardAvoidingView,
-  Platform,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  TouchableWithoutFeedback,
-  View,
-} from 'react-native';
+import { View } from 'react-native';
 import React, { useState } from 'react';
-import styles from './styles';
-import { HidePassIcon, ViewPassIcon } from '../../../assets/icons';
+import styles from '../styles';
+import AuthHeader from '../components/AuthHeader/index';
+import Input from '../../../common/components/Input/index';
+import DefaultButton from '../../../common/components/DefaultButton/index';
+import AuthLayout from '../components/AuthLayout/index';
 
 interface IInputValue {
   email: string;
@@ -20,7 +14,6 @@ interface IInputValue {
 }
 
 export default function LoginPage() {
-  const [isPassHidden, setIsPassHidden] = useState(true);
   const [inputValues, setInputValues] = useState<IInputValue>({
     email: '',
     password: '',
@@ -34,7 +27,9 @@ export default function LoginPage() {
     setInputValues(prevState => ({ ...prevState, [key]: value }));
   };
   const checkEmail = () => {
-    const emailValidator = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    const emailValidator = new RegExp(
+      '^([a-z0-9._%-]+@[a-z0-9.-]+.[a-z]{2,6})*$',
+    );
     if (!emailValidator.test(inputValues.email)) {
       handleChangeInput('errorEmail', 'Not valid email');
     } else {
@@ -58,81 +53,31 @@ export default function LoginPage() {
       !inputValues.password,
   );
   return (
-    <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
-      <View style={[styles.mainWrapper]}>
-        <KeyboardAvoidingView
-          keyboardVerticalOffset={Platform.select({ android: 20, ios: 90 })}
-          behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-        >
-          <View style={[styles.titleContainer]}>
-            <Text style={styles.title}>Раді тебе вітати!</Text>
-            <Text style={styles.welcomeText}>
-              Кожен пухнастик заслуговує на дбайливих господарів.Ми допоможемо
-              тобі знайти друга.
-            </Text>
-          </View>
-          <View style={styles.buttonContainer}>
-            <TouchableOpacity style={styles.loginBtn}>
-              <Text style={styles.authText}>Вхід</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.registrationBtn}>
-              <Text style={styles.authText}>Реєстрація</Text>
-            </TouchableOpacity>
-          </View>
-          <View style={styles.formContainer}>
-            <View style={styles.inputContainer}>
-              <TextInput
-                placeholder={'Email'}
-                style={styles.input}
-                placeholderTextColor={'#838383'}
-                onBlur={() => {
-                  checkEmail();
-                }}
-                value={inputValues.email}
-                onChangeText={text => handleChangeInput('email', text)}
-              />
-            </View>
-            {inputValues.errorEmail && <Text>{inputValues.errorEmail}</Text>}
-            <View style={styles.inputContainer}>
-              <TextInput
-                placeholder={'Password'}
-                style={styles.input}
-                placeholderTextColor={'#838383'}
-                value={inputValues.password}
-                onChangeText={text => {
-                  handleChangeInput('password', text);
-                  checkPassword(text);
-                }}
-                secureTextEntry={isPassHidden}
-              />
-              <TouchableOpacity
-                onPress={() => {
-                  setIsPassHidden(!isPassHidden);
-                }}
-                hitSlop={{ top: 15, bottom: 15, right: 15, left: 15 }}
-              >
-                {isPassHidden ? (
-                  <HidePassIcon fill="#000" />
-                ) : (
-                  <ViewPassIcon fill="#333" />
-                )}
-              </TouchableOpacity>
-            </View>
-            {inputValues.errorPassword && (
-              <Text>{inputValues.errorPassword}</Text>
-            )}
-          </View>
-          <TouchableOpacity
-            style={[
-              styles.loginBtnContainer,
-              isDisabledLoginBtn && { opacity: 0.5 },
-            ]}
-            disabled={isDisabledLoginBtn}
-          >
-            <Text style={styles.loginText}>Увійти</Text>
-          </TouchableOpacity>
-        </KeyboardAvoidingView>
+    <AuthLayout>
+      <AuthHeader activeTab={'login'} />
+      <View style={styles.formContainer}>
+        <Input
+          onBlur={checkEmail}
+          value={inputValues.email}
+          onChangeText={text => handleChangeInput('email', text)}
+          error={inputValues.errorEmail ?? undefined}
+          placeholder={'Email'}
+        />
+        <Input
+          placeholder={'Password'}
+          value={inputValues.password}
+          onChangeText={text => {
+            handleChangeInput('password', text);
+            checkPassword(text);
+          }}
+          secureTextEntry={true}
+        />
       </View>
-    </TouchableWithoutFeedback>
+      <DefaultButton
+        onPress={() => {}}
+        disabled={isDisabledLoginBtn}
+        text={'Увійти'}
+      />
+    </AuthLayout>
   );
 }
