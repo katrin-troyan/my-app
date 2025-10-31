@@ -3,8 +3,9 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import LoginPage from '../screen/Auth/Login/index';
 import Registration from '../screen/Auth/Registration';
 import { ScreenNames } from '../constants/screenNames';
+import { RootStackNavigation } from './types';
 
-const Stack = createNativeStackNavigator();
+const Stack = createNativeStackNavigator<RootStackNavigation>();
 
 export default function RootNavigation() {
   return (
