@@ -1,10 +1,15 @@
 import { View } from 'react-native';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import styles from '../styles';
 import AuthHeader from '../components/AuthHeader/index';
 import Input from '../../../common/components/Input/index';
 import DefaultButton from '../../../common/components/DefaultButton/index';
 import AuthLayout from '../components/AuthLayout/index';
+import auth from '@react-native-firebase/auth';
+import { CommonActions, useNavigation } from '@react-navigation/native';
+import { ScreenNames } from '../../../constants/screenNames';
+import { StackNavigationProp } from '@react-navigation/stack';
+import { RootStackNavigation } from '../../../navigation/types';
 
 interface IInputValue {
   email: string;
@@ -20,12 +25,16 @@ export default function LoginPage() {
     errorEmail: null,
     errorPassword: null,
   });
+
+  const navigation = useNavigation<StackNavigationProp<RootStackNavigation>>();
+
   const handleChangeInput = (
     key: 'email' | 'password' | 'errorEmail' | 'errorPassword',
     value: string | null,
   ) => {
     setInputValues(prevState => ({ ...prevState, [key]: value }));
   };
+
   const checkEmail = () => {
     const emailValidator = new RegExp(
       '^([a-z0-9._%-]+@[a-z0-9.-]+.[a-z]{2,6})*$',
@@ -36,6 +45,7 @@ export default function LoginPage() {
       handleChangeInput('errorEmail', null);
     }
   };
+
   const checkPassword = (text: string) => {
     if (text.length < 8) {
       handleChangeInput(
@@ -46,12 +56,38 @@ export default function LoginPage() {
       handleChangeInput('errorPassword', null);
     }
   };
+
+  const onLogin = async (email: string, password: string) => {
+    try {
+      const result = await auth().signInWithEmailAndPassword(email, password);
+      console.log('RESULT', result);
+    } catch (e) {
+      console.log('e', e);
+    }
+  };
+
   const isDisabledLoginBtn = Boolean(
     inputValues.errorEmail ||
       inputValues.errorPassword ||
       !inputValues.email ||
       !inputValues.password,
   );
+
+  useEffect(() => {
+    const subscriber = auth().onAuthStateChanged(user => {
+      if (user) {
+        navigation.dispatch(
+          CommonActions.reset({
+            index: 1,
+            routes: [{ name: ScreenNames.LOGGED_IN_STACK }],
+          }),
+        );
+      }
+    });
+
+    return subscriber;
+  }, [navigation]);
+
   return (
     <AuthLayout>
       <AuthHeader activeTab={'login'} />
@@ -74,7 +110,9 @@ export default function LoginPage() {
         />
       </View>
       <DefaultButton
-        onPress={() => {}}
+        onPress={() => {
+          void onLogin(inputValues.email, inputValues.password);
+        }}
         disabled={isDisabledLoginBtn}
         text={'Увійти'}
       />
