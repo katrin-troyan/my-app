@@ -6,6 +6,7 @@ import { TabBarStackType } from '../types';
 import getTabOptions from './options';
 
 const Tab = createBottomTabNavigator<TabBarStackType>();
+
 export default function TabBarStack() {
   return (
     <Tab.Navigator
