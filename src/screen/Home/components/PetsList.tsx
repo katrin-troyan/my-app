@@ -18,6 +18,7 @@ export default function PetsList({ pets }: { pets: IPets[] }) {
         data={pets}
         style={styles.mainContainer}
         numColumns={2}
+        keyExtractor={item => item.id}
         renderItem={({ item }) => {
           return (
             <TouchableOpacity style={styles.item}>
