@@ -2,6 +2,7 @@ import Svg, { Path } from 'react-native-svg';
 interface Props {
   width?: number;
   height?: number;
+  color?: string;
 }
 
 const ArrowIcon = ({ width = 24, height = 24 }: Props) => (

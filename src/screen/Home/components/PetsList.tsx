@@ -10,25 +10,35 @@ import {
 import { IPets } from '../index';
 import { fonts } from '../../../constants/fonts';
 import { FavoriteIcon } from '../../../assets/icons';
+import { useNavigation } from '@react-navigation/core';
+import { StackNavigationProp } from '@react-navigation/stack';
+import { LoggedInStackType } from '../../../navigation/types';
+import { ScreenNames } from '../../../constants/screenNames';
 
 export default function PetsList({ pets }: { pets: IPets[] }) {
+  const navigation = useNavigation<StackNavigationProp<LoggedInStackType>>();
+  const handleGoToPet = (item: IPets) => {
+    navigation.navigate(ScreenNames.PET_PAGE, { pet: item });
+  };
   return (
     <View style={styles.flex}>
       <FlatList
         data={pets}
         style={styles.mainContainer}
         numColumns={2}
-        keyExtractor={item => item.id}
         renderItem={({ item }) => {
           return (
-            <TouchableOpacity style={styles.item}>
+            <TouchableOpacity
+              style={styles.item}
+              onPress={() => handleGoToPet(item)}
+            >
               <ImageBackground
                 source={{ uri: item.images[0] }}
                 imageStyle={{ borderRadius: 20 }}
                 style={styles.image}
                 resizeMode={'cover'}
               >
-                <TouchableOpacity style={{ alignSelf: 'flex-end', margin: 10 }}>
+                <TouchableOpacity style={styles.favoriteBtn}>
                   <FavoriteIcon />
                 </TouchableOpacity>
                 <View style={styles.textContainer}>
@@ -67,4 +77,5 @@ const styles = StyleSheet.create({
     color: 'white',
     fontFamily: fonts.MontserratBold,
   },
+  favoriteBtn: { alignSelf: 'flex-end', margin: 10 },
 });

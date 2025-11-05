@@ -16,6 +16,9 @@ export type LoggedInStackType = {
       params?: { settings: ISettings };
     };
   };
+  PET_PAGE: {
+    pet: IPets;
+  };
   FILTERS_SETTINGS_PAGE: { petsList: IPets[] };
   HOME_PAGE: { settings: ISettings };
 };

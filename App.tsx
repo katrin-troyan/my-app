@@ -28,7 +28,7 @@ function App(): React.JSX.Element {
         DevSettings.reload();
       });
     }
-    // uploadAnimalsToFirestore(animals);
+    //  uploadAnimalsToFirestore(animals);
   }, []);
 
   return (
