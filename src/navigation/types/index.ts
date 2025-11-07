@@ -25,7 +25,7 @@ export type LoggedInStackType = {
 
 export type TabBarStackType = {
   HOME_PAGE: {
-    settings: ISettings;
+    settings?: ISettings;
   };
   FAVORITE_PAGE: undefined;
 };

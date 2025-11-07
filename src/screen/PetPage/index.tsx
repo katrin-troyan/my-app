@@ -13,17 +13,19 @@ import {
   ArrowIcon,
   CloseIcon,
   DogImage,
-  HeartIcon,
+  FavoriteIcon,
   LongArrowIcon,
   PlaceIcon,
 } from '../../assets/icons';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { LoggedInStackType } from '../../navigation/types';
 import { fonts } from '../../constants/fonts';
 import DefaultButton from '../../common/components/DefaultButton';
 import Modal from 'react-native-modal';
 import Input from '../../common/components/Input';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { handleAddToFavorite } from '../Home/components/PetsList';
 
 interface IFormInfo {
   name: string;
@@ -34,6 +36,7 @@ interface IFormInfo {
 export default function PetPage() {
   const route = useRoute<RouteProp<{ params: { pet: IPets } }>>();
   const navigation = useNavigation<StackNavigationProp<LoggedInStackType>>();
+  const [favorites, setFavorites] = useState<IPets[]>([]);
 
   const [sliderIndex, setSliderIndex] = useState<number>(0);
   const [formInfo, setFormInfo] = useState<IFormInfo>({
@@ -62,9 +65,24 @@ export default function PetPage() {
       setSliderIndex(route?.params?.pet?.images.length);
     }
   };
+  const getFavorite = async () => {
+    try {
+      const favorites = await AsyncStorage.getItem('favorites');
+      if (favorites) {
+        const result = JSON.parse(favorites);
+        setFavorites(result);
+      }
+    } catch (e) {
+      console.log('e', e);
+    }
+  };
   const handleEditForm = (key: string, value: string) => {
     setFormInfo(prevState => ({ ...prevState, [key]: value }));
   };
+  useEffect(() => {
+    getFavorite();
+  }, []);
+
   return (
     <ScrollView style={{ flex: 1 }}>
       <View>
@@ -120,8 +138,21 @@ export default function PetPage() {
                 </Text>
               </View>
             </View>
-            <TouchableOpacity style={styles.heartContainer}>
-              <HeartIcon />
+            <TouchableOpacity
+              style={styles.favoriteBtn}
+              onPress={() => {
+                handleAddToFavorite(route?.params?.pet).then(() => {
+                  void getFavorite();
+                });
+              }}
+            >
+              <FavoriteIcon
+                isFavorite={
+                  !!favorites.find(
+                    e => e.timeStamp === route?.params?.pet?.timeStamp,
+                  )
+                }
+              />
             </TouchableOpacity>
           </View>
           <View style={{ gap: 10, marginHorizontal: 10 }}>
@@ -206,6 +237,7 @@ export default function PetPage() {
               </Text>
             </View>
             <TouchableOpacity
+              style={styles.closeBtn}
               onPress={() =>
                 setFormIsModalVisible(prevState => ({
                   ...prevState,
@@ -389,4 +421,10 @@ const styles = StyleSheet.create({
     padding: 20,
     gap: 20,
   },
+  closeBtn: {
+    position: 'absolute',
+    top: 10,
+    right: 10,
+  },
+  favoriteBtn: { alignSelf: 'flex-end', margin: 10 },
 });
