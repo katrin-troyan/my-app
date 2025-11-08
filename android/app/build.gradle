@@ -122,4 +122,14 @@ dependencies {
     } else {
         implementation 'io.github.react-native-community:jsc-android:2026004.+'
     }
+    // AndroidX (щоб уникнути дублікатів)
+    implementation 'androidx.appcompat:appcompat:1.6.1'
+    implementation 'androidx.core:core-ktx:1.16.0'
+}
+
+// Примусове вирішення конфліктів
+configurations.all {
+    resolutionStrategy {
+        force 'androidx.core:core:1.16.0'
+    }
 }
