@@ -3,7 +3,7 @@ import React, { useEffect } from 'react';
 import { DevSettings, View } from 'react-native';
 import RootNavigation from './src/navigation';
 import 'react-native-gesture-handler';
-import SplashScreen from 'react-native-splash-screen';
+
 // import {firebase} from '@react-native-firebase/firestore';
 // import {animals} from './animals_list.js';
 function App(): React.JSX.Element {
@@ -30,7 +30,6 @@ function App(): React.JSX.Element {
       });
     }
     //  uploadAnimalsToFirestore(animals);
-    SplashScreen.hide();
   }, []);
 
   return (

@@ -5,7 +5,11 @@ import { useNavigation } from '@react-navigation/core';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { LoggedInStackType } from '../../../navigation/types';
 
-export default function SettingsHeader() {
+type Props = {
+  title?: string;
+};
+
+export default function SettingsHeader({ title }: Props) {
   const navigation = useNavigation<StackNavigationProp<LoggedInStackType>>();
   return (
     <View style={styles.mainWrapper}>
@@ -15,7 +19,7 @@ export default function SettingsHeader() {
       >
         <ArrowIcon width={20} height={20} />
       </TouchableOpacity>
-      <Text style={styles.title}>Фільтри</Text>
+      <Text style={styles.title}>{title}</Text>
     </View>
   );
 }

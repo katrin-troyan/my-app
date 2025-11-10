@@ -16,10 +16,12 @@ export type LoggedInStackType = {
       params?: { settings: ISettings };
     };
   };
+  WEB_PAGE: undefined;
+  LANGUAGES_PAGE: undefined;
   PET_PAGE: {
     pet: IPets;
   };
-  FILTERS_SETTINGS_PAGE: { petsList: IPets[] };
+  FILTERS_SETTINGS_PAGE: { petsList: IPets[]; title?: string };
   HOME_PAGE: { settings: ISettings };
 };
 

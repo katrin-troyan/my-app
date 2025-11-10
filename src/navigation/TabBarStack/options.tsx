@@ -4,16 +4,18 @@ import { ScreenNames } from '../../constants/screenNames';
 import { fonts } from '../../constants/fonts';
 import { BottomTabNavigationOptions } from '@react-navigation/bottom-tabs';
 import { RouteProp } from '@react-navigation/native';
+import i18n from '../../../i18.config';
 import { TabBarStackType } from '../types';
 
 const getName = (name: string) => {
   switch (name) {
     case ScreenNames.FAVORITE_PAGE:
-      return 'Улюблюені';
+      return i18n.t('favorite');
     case ScreenNames.HOME_PAGE:
-      return 'Пухнастики';
+      return i18n.t('fluffies');
   }
 };
+
 const getIcon = (name: string, focused: boolean) => {
   switch (name) {
     case ScreenNames.FAVORITE_PAGE:
@@ -22,6 +24,7 @@ const getIcon = (name: string, focused: boolean) => {
       return <PawIcon isFocused={focused} color={'#0B0B0B'} />;
   }
 };
+
 export default function getTabOptions(
   route: RouteProp<TabBarStackType, keyof TabBarStackType>,
 ): BottomTabNavigationOptions {
@@ -33,30 +36,16 @@ export default function getTabOptions(
       borderTopRightRadius: 50,
       borderTopLeftRadius: 50,
     },
-    tabBarItemStyle: {
-      paddingTop: 20,
-    },
     tabBarShowLabel: false,
     headerShown: false,
     tabBarIcon: ({ focused }) => {
       return (
-        <View
-          style={{
-            alignItems: 'center',
-            justifyContent: 'center',
-            gap: 5,
-            width: 100,
-          }}
-        >
+        <View style={{ alignItems: 'center', gap: 5 }}>
           {getIcon(route.name, focused)}
           <Text
-            numberOfLines={1}
-            ellipsizeMode="tail"
             style={{
               fontFamily: fonts.MontserratRegular,
               color: focused ? 'black' : '#838383',
-              textAlign: 'center',
-              flexWrap: 'nowrap',
             }}
           >
             {getName(route.name)}
